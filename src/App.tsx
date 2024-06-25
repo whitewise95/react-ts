@@ -1,35 +1,71 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import styled from "styled-components";
+import Countries from "./components/Countries.tsx";
+import {useEffect, useState} from "react";
+import {getCountries as getCountriesApi} from "./api/countryApi.tsx";
+
+type countryState = {
+  area: number
+  flag: string
+  common: string
+  capital: string
+  isSelected: boolean
+}
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [countries, setCountries] = useState<countryState[]>([]);
+
+  useEffect(() => {
+    const getCountries = async () => {
+      const response = await getCountriesApi();
+
+      const dataList  = [];
+      for (let i = 0; i < 40; i++) {
+        dataList.push(response.data[i]);
+      }
+
+      setCountries(
+          dataList.map(country => {
+              return {
+                area: country.area ,
+                flag: country.flag,
+                common: country.name.common ,
+                capital: country.capital ,
+                isSelected: false
+              }
+          })
+      )
+    }
+    getCountries();
+  }, [])
+
+  const toggleSelected = (e:MouseEvent, area: number) => {
+    const newCountries = countries.map(country => {
+      if (area === country.area) {
+        country.isSelected = !country.isSelected
+      }
+      return country;
+    });
+
+    setCountries(newCountries)
+  }
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+      <AppWrapper>
+        <Countries isSelected={true} countries={countries} toggleSelected={toggleSelected}/>
+        <Countries isSelected={false} countries={countries} toggleSelected={toggleSelected}/>
+      </AppWrapper>
   )
+
+
 }
+
+const AppWrapper = styled.div`
+  margin-top: 100px;
+  display: flex;
+  flex-direction: column;
+  gap: 60px;
+  //flex-wrap: wrap;
+`
+
 
 export default App
