@@ -1,7 +1,8 @@
 import styled from "styled-components";
+import React from "react";
+import {CountryProps} from "../interface/countryInterface.tsx";
 
-function Country({isSelected, country, toggleSelected}) {
-
+const Country: React.FC<CountryProps> = ({isSelected, country, toggleSelected}) => {
   return (
       <CountryContainer $isSelected={isSelected} onClick={e => toggleSelected(e, country.area)}>
           <Flag>{country.flag}</Flag>
@@ -22,6 +23,7 @@ const CountryContainer = styled.div`
   transition: transform 0.3s ease;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 기본 쉐도우 */
   cursor: pointer;
+
   &:hover {
     transform: scale(1.05);
   }

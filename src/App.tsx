@@ -2,14 +2,7 @@ import styled from "styled-components";
 import Countries from "./components/Countries.tsx";
 import {useEffect, useState} from "react";
 import {getCountries as getCountriesApi} from "./api/countryApi.tsx";
-
-type countryState = {
-  area: number
-  flag: string
-  common: string
-  capital: string
-  isSelected: boolean
-}
+import {countryState} from "./type/countryType.tsx";
 
 function App() {
   const [countries, setCountries] = useState<countryState[]>([]);
@@ -18,13 +11,8 @@ function App() {
     const getCountries = async () => {
       const response = await getCountriesApi();
 
-      const dataList  = [];
-      for (let i = 0; i < 40; i++) {
-        dataList.push(response.data[i]);
-      }
-
       setCountries(
-          dataList.map(country => {
+          response.map(country => {
               return {
                 area: country.area ,
                 flag: country.flag,

@@ -1,7 +1,9 @@
 import styled from "styled-components";
 import Country from "./Country.tsx";
+import {CountriesProps} from "../interface/countryInterface.tsx";
+import React from "react";
 
-function Countries({isSelected, countries, toggleSelected}) {
+const Countries: React.FC<CountriesProps> = ({isSelected, countries, toggleSelected}) => {
   return (
       <CountriesWrapper>
         <Title>{isSelected ? "Favorite Countries" : "Countries"}</Title>
