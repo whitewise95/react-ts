@@ -3,30 +3,31 @@ import Countries from "./components/Countries.tsx";
 import {useEffect, useState} from "react";
 import {getCountries as getCountriesApi} from "./api/countryApi.tsx";
 import {countryState} from "./type/countryType.tsx";
+import {CountryApiResponse} from "./interface/countryInterface.tsx";
 
 function App() {
   const [countries, setCountries] = useState<countryState[]>([]);
 
   useEffect(() => {
     const getCountries = async () => {
-      const response = await getCountriesApi();
+      const response: CountryApiResponse[] = await getCountriesApi();
 
       setCountries(
           response.map(country => {
-              return {
-                area: country.area ,
-                flag: country.flag,
-                common: country.name.common ,
-                capital: country.capital ,
-                isSelected: false
-              }
+            return {
+              area: country.area,
+              flag: country.flag,
+              common: country.name.common,
+              capital: country.capital,
+              isSelected: false
+            }
           })
       )
     }
     getCountries();
   }, [])
 
-  const toggleSelected = (e:MouseEvent, area: number) => {
+  const toggleSelected = (e: MouseEvent, area: number): void => {
     const newCountries = countries.map(country => {
       if (area === country.area) {
         country.isSelected = !country.isSelected
